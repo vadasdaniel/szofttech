@@ -1,4 +1,4 @@
-package src.front;
+package front;
 
 public class Frontend {
 

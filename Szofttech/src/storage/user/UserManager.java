@@ -1,6 +1,6 @@
-package src.storage.user;
+package storage.user;
 
-import src.storage.Manager;
+import storage.Manager;
 
 import java.util.List;
 

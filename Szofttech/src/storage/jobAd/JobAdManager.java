@@ -1,7 +1,7 @@
-package src.storage.jobAd;
+package storage.jobAd;
 
-import src.common.JobAd;
-import src.storage.Manager;
+import common.JobAd;
+import storage.Manager;
 
 import java.util.List;
 

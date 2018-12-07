@@ -1,7 +1,7 @@
-package src.storage.subscribe;
+package storage.subscribe;
 
-import src.common.Subscription;
-import src.storage.Manager;
+import common.Subscription;
+import storage.Manager;
 
 import java.util.List;
 

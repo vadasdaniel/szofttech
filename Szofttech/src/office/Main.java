@@ -1,11 +1,11 @@
-package hu.office;
+package office;
 
-import src.front.Frontend;
-import src.storage.company.CompanyManager;
-import src.storage.handledSubscribtions.HandledSubscriptionsManager;
-import src.storage.jobAd.JobAdManager;
-import src.storage.subscribe.SubscribeManager;
-import src.storage.user.UserManager;
+import front.Frontend;
+import storage.company.CompanyManager;
+import storage.handledSubscribtions.HandledSubscriptionsManager;
+import storage.jobAd.JobAdManager;
+import storage.subscribe.SubscribeManager;
+import storage.user.UserManager;
 
 
 public class Main {
@@ -17,7 +17,8 @@ public class Main {
     private UserManager userManager;
 
     public static void main(String[] args) {
-        Frontend frontend = new Frontend();
+        Frontend frontend;
+        frontend = new Frontend();
 
         frontend.start();
     }

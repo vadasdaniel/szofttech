@@ -1,4 +1,4 @@
-package src.back;
+package back;
 
 public class Backend {
 

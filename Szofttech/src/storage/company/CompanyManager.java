@@ -1,7 +1,7 @@
-package src.storage.company;
+package storage.company;
 
-import src.common.Company;
-import src.storage.Manager;
+import common.Company;
+import storage.Manager;
 
 import java.util.List;
 
