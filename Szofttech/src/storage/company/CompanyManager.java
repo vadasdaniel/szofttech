@@ -1,4 +1,4 @@
-package src.storage.company;
+package storage.company;
 
 import src.back.FileManager;
 import src.common.Company;

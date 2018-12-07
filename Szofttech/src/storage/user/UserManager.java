@@ -1,4 +1,4 @@
-package src.storage.user;
+package storage.user;
 
 import src.back.FileManager;
 import src.storage.Manager;

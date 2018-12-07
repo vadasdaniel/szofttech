@@ -1,4 +1,4 @@
-package src.common;
+package common;
 
 public class Company extends Object {
 

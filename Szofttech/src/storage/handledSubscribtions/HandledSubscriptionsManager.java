@@ -1,4 +1,4 @@
-package src.storage.handledSubscribtions;
+package storage.handledSubscribtions;
 
 import src.back.FileManager;
 import src.common.Subscription;

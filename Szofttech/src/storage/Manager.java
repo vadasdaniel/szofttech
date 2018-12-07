@@ -1,4 +1,4 @@
-package src.storage;
+package storage;
 
 import java.util.List;
 

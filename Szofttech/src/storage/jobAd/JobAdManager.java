@@ -1,4 +1,4 @@
-package src.storage.jobAd;
+package storage.jobAd;
 
 import src.back.FileManager;
 import src.common.JobAd;
