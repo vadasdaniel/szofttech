@@ -16,24 +16,12 @@ public class Subscription {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getJobAdId() {
         return jobAdId;
     }
 
-    public void setJobAdId(String jobAdId) {
-        this.jobAdId = jobAdId;
-    }
-
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     @Override

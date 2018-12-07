@@ -1,5 +1,8 @@
 package src.hu.office;
 
+import src.back.Backend;
+import src.back.FileManager;
+import src.common.LoginSession;
 import src.storage.company.CompanyManager;
 import src.storage.handledSubscribtions.HandledSubscriptionsManager;
 import src.storage.jobAd.JobAdManager;
@@ -18,17 +21,22 @@ public class Main {
 	// write your code here
     }
 
-    public Main(
-            JobAdManager jobAdManager,
-            CompanyManager companyManager,
-            HandledSubscriptionsManager handledSubscriptionsManager,
-            SubscribeManager subscribeManager,
-            UserManager userManager
-    ) {
-        this.jobAdManager = jobAdManager;
-        this.companyManager = companyManager;
-        this.handledSubscriptionsManager = handledSubscriptionsManager;
-        this.subscribeManager = subscribeManager;
-        this.userManager = userManager;
+    public Main() {
+        Backend backend = new Backend();
+        FileManager fileManager = new FileManager();
+
+        jobAdManager = new JobAdManager(fileManager);
+        companyManager = new CompanyManager(fileManager);
+        handledSubscriptionsManager = new HandledSubscriptionsManager(fileManager);
+        subscribeManager = new SubscribeManager(fileManager);
+        userManager = new UserManager(fileManager);
+    }
+
+    private void start() {
+        jobAdManager.readData();
+        companyManager.readData();
+        handledSubscriptionsManager.readData();
+        subscribeManager.readData();
+        userManager.readData();
     }
 }
