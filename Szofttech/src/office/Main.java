@@ -7,6 +7,8 @@ import storage.jobAd.JobAdManager;
 import storage.subscribe.SubscribeManager;
 import storage.user.UserManager;
 
+import java.io.IOException;
+
 
 public class Main {
 
