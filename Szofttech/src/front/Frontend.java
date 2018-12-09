@@ -127,7 +127,7 @@ public class Frontend {
         backend.unsubscribe(subscription);
     }
 
-    private void userSearch() {
+    private void userSearchWindow() {
         FrontendUtil.writeWindowHeader("Keresés");
 
         System.out.println("(1) Hirdetések között");
@@ -136,7 +136,7 @@ public class Frontend {
 
         switch (menuItem) {
             case 1:
-
+                searchInJobAds();
                 break;
             case 2:
 
@@ -151,7 +151,7 @@ public class Frontend {
         int choose = scanner.nextInt();
         switch (choose) {
             case 1:
-                listJobAds();
+                userSearchWindow();
                 break;
             case 2:
                 unsubscribeWindow();
@@ -208,7 +208,11 @@ public class Frontend {
 
     private void listJobAds() {
         System.out.println("\n Hírdetések listázása!\n");
-        backend.listJobAds();
+        Boolean isEmpty = backend.listJobAds();
+
+        if ( isEmpty ) {
+            System.out.println("Nincsenek hirdetések.");
+        }
     }
 
     private void deleteUser() {

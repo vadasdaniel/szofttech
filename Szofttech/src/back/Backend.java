@@ -59,17 +59,28 @@ public class Backend {
         String userId = UUID.randomUUID().toString();
         User user = new User(userId, name, username, password, userType);
 
+        if ( userType == UserType.PARTNER_COMPANY ) {
+            Company company = new Company(UUID.randomUUID().toString(), name, userId);
+            companyManager.add(company);
+        }
+
         userManager.add(user);
         return true;
     }
 
-    public void listJobAds(){
+    public Boolean listJobAds() {
         System.out.println("Hirdetés neve | Cég neve | Munka leírás");
-        jobAdManager.list()
-                .forEach(jobAd -> {
-                    Company adCreator = companyManager.get(jobAd.getCompanyId());
-                    System.out.println(jobAd.getName() + "|" + adCreator.getName() + "|" + jobAd.getJobDescription());
-                });
+
+        if (jobAdManager.list().isEmpty()) {
+            return true;
+        } else {
+            jobAdManager.list()
+                    .forEach(jobAd -> {
+                        Company adCreator = companyManager.get(jobAd.getCompanyId());
+                        System.out.println(jobAd.getName() + "|" + adCreator.getName() + "|" + jobAd.getJobDescription());
+                    });
+            return false;
+        }
     }
 
     public Map<JobAd, Subscription> getUserSubscriptions() {
