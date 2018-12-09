@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CompanyManager implements Manager<Company> {
 
-    private static final String filePath = "/storage/resources/companies.dat";
+    private static final String fileName = "companies.dat";
     private List<Company> companies;
     private FileManager fileManager;
 
@@ -24,7 +24,7 @@ public class CompanyManager implements Manager<Company> {
     public void readData() {
 
         try {
-            List<String> datas = fileManager.read(filePath);
+            List<String> datas = fileManager.read(fileName);
             companies = new ArrayList<>();
             for (String data: datas) {
                 String[] dataColumn = data.split(",");
@@ -42,9 +42,13 @@ public class CompanyManager implements Manager<Company> {
     }
 
     @Override
-    public void delete(String id) {
-        companies.removeIf(company -> company.getId().equals(id));
-        fileManager.remove(filePath, id);
+    public void delete(Company content) {
+        companies.removeIf(company -> company.getId().equals(content.getId()));
+        try {
+            fileManager.remove(fileName, content.toString());
+        } catch (IOException e) {
+            // TODO Logging
+        }
     }
 
     @Override
@@ -59,7 +63,11 @@ public class CompanyManager implements Manager<Company> {
     @Override
     public void add(Company company) {
         companies.add(company);
-        fileManager.add(filePath, company);
+        try {
+            fileManager.add(fileName, company.toString());
+        } catch (IOException e) {
+            // TODO Logging
+        }
     }
 
     @Override

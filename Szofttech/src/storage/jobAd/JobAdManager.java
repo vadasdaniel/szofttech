@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class JobAdManager implements Manager<JobAd> {
 
-    private static final String filePath = "/storage/resources/ads.dat";
+    private static final String fileName = "ads.dat";
     private FileManager fileManager;
     private List<JobAd> jobAds;
 
@@ -23,7 +23,7 @@ public class JobAdManager implements Manager<JobAd> {
     @Override
     public void readData() {
         try {
-            List<String> datas = fileManager.read(filePath);
+            List<String> datas = fileManager.read(fileName);
             jobAds = new ArrayList<>();
             for ( String data: datas ) {
                 String[] dataColumn = data.split(",");
@@ -42,9 +42,13 @@ public class JobAdManager implements Manager<JobAd> {
     }
 
     @Override
-    public void delete(String id) {
-        jobAds.removeIf(next -> next.getId().equals(id));
-        fileManager.remove(filePath, id);
+    public void delete(JobAd content) {
+        jobAds.removeIf(next -> next.getId().equals(content.getId()));
+        try {
+            fileManager.remove(fileName, content.toString());
+        } catch (IOException e) {
+
+        }
     }
 
     @Override
@@ -59,7 +63,11 @@ public class JobAdManager implements Manager<JobAd> {
     @Override
     public void add(JobAd content) {
         jobAds.add(content);
-        fileManager.add(filePath, content);
+        try {
+            fileManager.add(fileName, content.toString());
+        } catch (IOException e) {
+            // TODO Logging
+        }
     }
 
     @Override

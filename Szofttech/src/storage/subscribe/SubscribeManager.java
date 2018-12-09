@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class SubscribeManager implements Manager<Subscription> {
 
-    private static final String filePath = "/storage/resources/subscriptions.dat";
+    private static final String fileName = "subscriptions.dat";
     private FileManager fileManager;
     private List<Subscription> subscriptions;
 
@@ -24,7 +24,7 @@ public class SubscribeManager implements Manager<Subscription> {
     @Override
     public void readData() {
         try {
-            List<String> datas = fileManager.read(filePath);
+            List<String> datas = fileManager.read(fileName);
             subscriptions = new ArrayList<>();
             for ( String data: datas ) {
                 String[] dataColumn = data.split(",");
@@ -47,9 +47,13 @@ public class SubscribeManager implements Manager<Subscription> {
     }
 
     @Override
-    public void delete(String id) {
-        subscriptions.removeIf(subscription -> subscription.getId().equals(id));
-        fileManager.remove(filePath, id);
+    public void delete(Subscription content) {
+        subscriptions.removeIf(subscription -> subscription.getId().equals(content.getId()));
+        try {
+            fileManager.remove(fileName, content.toString());
+        } catch ( IOException e ) {
+            // TODO Logging
+        }
     }
 
     @Override
@@ -64,7 +68,11 @@ public class SubscribeManager implements Manager<Subscription> {
     @Override
     public void add(Subscription content) {
         subscriptions.add(content);
-        fileManager.add(filePath, content);
+        try {
+            fileManager.add(fileName, content.toString());
+        } catch (IOException e) {
+
+        }
     }
 
     @Override

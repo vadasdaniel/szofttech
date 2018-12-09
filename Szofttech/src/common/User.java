@@ -40,6 +40,6 @@ public class User {
 
     @Override
     public String toString() {
-        return id + ", " + name + ", " + username + ", " + password + ", " + userType.toString();
+        return id + ", " + name + ", " + username + ", " + password + ", " + userType;
     }
 }

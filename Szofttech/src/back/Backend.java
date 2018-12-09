@@ -1,9 +1,6 @@
 package back;
 
-import common.Company;
-import common.JobAd;
-import common.LoginSession;
-import common.User;
+import common.*;
 import common.enums.UserType;
 import storage.company.CompanyManager;
 import storage.handledSubscribtions.HandledSubscriptionsManager;
@@ -59,8 +56,10 @@ public class Backend {
                 break;
         }
 
-        userManager.add(new User(UUID.randomUUID().toString(), name, username, password, userType));
+        String userId = UUID.randomUUID().toString();
+        User user = new User(userId, name, username, password, userType);
 
+        userManager.add(user);
         return true;
     }
 
@@ -73,18 +72,18 @@ public class Backend {
                 });
     }
 
-    public Map<JobAd, String> getUserSubscriptions() {
+    public Map<JobAd, Subscription> getUserSubscriptions() {
         String userId = loginSession.getUser().getId();
-        Map<JobAd, String> jobs = new LinkedHashMap<>();
+        Map<JobAd, Subscription> jobs = new LinkedHashMap<>();
 
         subscribeManager.list()
                 .stream()
                 .filter(subscription -> subscription.getUserId().equals(userId))
-                .forEach(subscription -> jobs.put(jobAdManager.get(subscription.getJobAdId()), subscription.getId()));
+                .forEach(subscription -> jobs.put(jobAdManager.get(subscription.getJobAdId()), subscription));
         return jobs;
     }
 
-    public void unsubscribe(String id) {
-        subscribeManager.delete(id);
+    public void unsubscribe(Subscription subscription) {
+        subscribeManager.delete(subscription);
     }
 }

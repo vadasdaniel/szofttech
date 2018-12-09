@@ -2,6 +2,7 @@ package front;
 
 import back.Backend;
 import common.JobAd;
+import common.Subscription;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -117,13 +118,13 @@ public class Frontend {
 
     private void unsubscribeWindow() {
         FrontendUtil.writeWindowHeader("Lejelentkezés hirdetésről");
-        Map<JobAd, String> subscriptions = backend.getUserSubscriptions();
+        Map<JobAd, Subscription> subscriptions = backend.getUserSubscriptions();
         System.out.println("Munka neve | Leírás");
         subscriptions.forEach((job, subscriptionId) -> System.out.println(job.getName() + job.getJobDescription()));
         System.out.print("Írja be a megfelelő sorszámot, hogy lejelentkezzen:");
         Integer index = scanner.nextInt();
-        String subscriptionId = new ArrayList<String>(subscriptions.values()).get(index);
-        backend.unsubscribe(subscriptionId);
+        Subscription subscription = new ArrayList<>(subscriptions.values()).get(index);
+        backend.unsubscribe(subscription);
     }
 
     private void userSearch() {
@@ -144,6 +145,7 @@ public class Frontend {
     }
 
     private void userMenu() {
+        FrontendUtil.writeWindowHeader("Ügyfél menü");
         System.out.println("(1) Keresés\n" +
                 "(2) Lejelentkezés hírdetéstről");
         int choose = scanner.nextInt();
@@ -158,6 +160,7 @@ public class Frontend {
     }
 
     private void partnerCompanyMenu() {
+        FrontendUtil.writeWindowHeader("Partnercég menü");
         System.out.println("(1) Hírdetések keresése\n" +
                 "(2) Hírdetés létrehozása\n" +
                 "(3) Jelentkező elbírálása\n" +
@@ -180,6 +183,7 @@ public class Frontend {
     }
 
     private void adminMenu() {
+        FrontendUtil.writeWindowHeader("Admin menü");
         System.out.println("(1) Keresés\n" +
                 "(2) Statisztika\n" +
                 "(3) Hírdetés tölés\n" +

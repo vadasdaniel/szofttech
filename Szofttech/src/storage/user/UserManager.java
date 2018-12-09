@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UserManager implements Manager<User> {
 
-    private static final String filePath = "";
+    private static final String fileName = "users.dat";
     private FileManager fileManager;
     private List<User> users;
 
@@ -24,11 +24,11 @@ public class UserManager implements Manager<User> {
     @Override
     public void readData() {
         try {
-            List<String> datas = fileManager.read(filePath);
+            List<String> datas = fileManager.read(fileName);
             users = new ArrayList<>();
 
             for ( String data: datas ) {
-                String[] dataColumn = data.split(",");
+                String[] dataColumn = data.split(", ");
 
                 User user = new User(
                         dataColumn[0],
@@ -45,9 +45,13 @@ public class UserManager implements Manager<User> {
     }
 
     @Override
-    public void delete(String id) {
-        users.removeIf(user -> user.getId().equals(id));
-        fileManager.remove(filePath, id);
+    public void delete(User userToDelete) {
+        users.removeIf(user -> user.getId().equals(userToDelete.getId()));
+        try {
+            fileManager.remove(fileName, userToDelete.toString());
+        } catch (IOException e) {
+            // TODO Logging
+        }
     }
 
     @Override
@@ -62,6 +66,12 @@ public class UserManager implements Manager<User> {
     @Override
     public void add(User content) {
         users.add(content);
+        System.out.println(content.toString());
+        try {
+            fileManager.add(fileName, content.toString());
+        } catch (IOException e) {
+            // TODO Logging
+        }
     }
 
     @Override
