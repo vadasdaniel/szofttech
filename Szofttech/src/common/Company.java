@@ -1,17 +1,15 @@
 package common;
 
-public class Company extends Object {
+public class Company {
 
     private String id;
     private String name;
-    private String password;
-    private String username;
+    private String userId;
 
-    public Company(String id, String name, String password, String username) {
+    public Company(String id, String name, String userId) {
         this.id = id;
         this.name = name;
-        this.password = password;
-        this.username = username;
+        this.userId = userId;
     }
 
     public String getId() {
@@ -22,21 +20,12 @@ public class Company extends Object {
         return name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
     @Override
     public String toString() {
-        return "Company{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", username='" + username + '\'' +
-                '}';
+        return id + ", " + name + ", " + userId;
     }
 }

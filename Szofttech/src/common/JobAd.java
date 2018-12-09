@@ -1,6 +1,6 @@
 package common;
 
-public class JobAd {
+public class JobAd  {
 
     private String id;
     private String companyId;
@@ -32,11 +32,6 @@ public class JobAd {
 
     @Override
     public String toString() {
-        return "JobAd{" +
-                "id='" + id + '\'' +
-                ", companyId='" + companyId + '\'' +
-                ", name='" + name + '\'' +
-                ", jobDescription='" + jobDescription + '\'' +
-                '}';
+        return id + ", " + companyId + ", " + name + ", " + jobDescription;
     }
 }

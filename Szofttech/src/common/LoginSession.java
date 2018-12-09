@@ -1,11 +1,11 @@
-package src.common;
+package common;
 
-public class LoginSession<T> {
+public class LoginSession {
 
     private String id;
-    private T user;
+    private User user;
 
-    public LoginSession(String id, T user) {
+    public LoginSession(String id, User user) {
         this.id = id;
         this.user = user;
     }
@@ -18,7 +18,7 @@ public class LoginSession<T> {
         return id;
     }
 
-    public T getUser() {
+    public User getUser() {
         return user;
     }
 }

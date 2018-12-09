@@ -1,5 +1,7 @@
 package common;
 
+import common.enums.UserType;
+
 public class User {
 
     private String id;
@@ -36,18 +38,8 @@ public class User {
         return userType;
     }
 
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", userType=" + userType +
-                '}';
+        return id + ", " + name + ", " + username + ", " + password + ", " + userType.toString();
     }
 }

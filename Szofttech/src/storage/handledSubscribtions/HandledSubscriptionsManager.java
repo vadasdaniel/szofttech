@@ -1,15 +1,16 @@
 package storage.handledSubscribtions;
 
-import src.back.FileManager;
-import src.common.Subscription;
-import src.storage.Manager;
+import back.FileManager;
+import common.Subscription;
+import storage.Manager;
 
 import java.util.List;
 
-public class HandledSubscriptionsManager implements Manager {
+public class HandledSubscriptionsManager implements Manager<Subscription> {
 
     private static final String filePath = "";
     private FileManager fileManager;
+    private List<Subscription> subscriptions;
 
     public HandledSubscriptionsManager(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -17,7 +18,6 @@ public class HandledSubscriptionsManager implements Manager {
 
     @Override
     public void readData() {
-
     }
 
     @Override
@@ -31,7 +31,7 @@ public class HandledSubscriptionsManager implements Manager {
     }
 
     @Override
-    public void add(Object handledSubscription) {
+    public void add(Subscription handledSubscription) {
 
     }
 
