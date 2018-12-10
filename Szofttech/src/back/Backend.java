@@ -72,11 +72,10 @@ public class Backend {
     }
 
     public Boolean listJobAds() {
-        System.out.println("Hirdetés neve | Cég neve | Munka leírás");
-
         if (jobAdManager.list().isEmpty()) {
             return true;
         } else {
+            System.out.println("Hirdetés neve | Cég neve | Munka leírás");
             jobAdManager.list()
                     .forEach(jobAd -> {
                         Company adCreator = companyManager.get(jobAd.getCompanyId());
@@ -105,7 +104,15 @@ public class Backend {
         return companyManager.getByUserId(userId).getId();
     }
 
-    public void saveJobAd(JobAd jobAd){
+    public void saveJobAd(JobAd jobAd) {
         jobAdManager.add(jobAd);
+    }
+
+    public JobAd getJobAd(String id) {
+        return jobAdManager.get(id);
+    }
+
+    public Company getCompany(String id) {
+        return companyManager.get(id);
     }
 }
