@@ -5,6 +5,7 @@ import common.JobAd;
 import common.Subscription;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -121,10 +122,16 @@ public class Frontend {
         Map<JobAd, Subscription> subscriptions = backend.getUserSubscriptions();
         System.out.println("Munka neve | Leírás");
         subscriptions.forEach((job, subscriptionId) -> System.out.println(job.getName() + job.getJobDescription()));
-        System.out.print("Írja be a megfelelő sorszámot, hogy lejelentkezzen:");
-        Integer index = scanner.nextInt();
-        Subscription subscription = new ArrayList<>(subscriptions.values()).get(index);
-        backend.unsubscribe(subscription);
+        System.out.print("Írja be a megfelelő sorszámot(kat), hogy lejelentkezzen(vesszővel elválasztva):");
+        String[] indexes = scanner.next().split(",");
+        List<Subscription> subscriptionList = new ArrayList<>();
+        for ( int i = 0; i < subscriptions.values().size(); i++) {
+            for ( int k = 0; k < indexes.length; k++ ) {
+                Integer index = Integer.valueOf(indexes[k]);
+                subscriptionList.add(subscriptions.get(index));
+            }
+        }
+        backend.unsubscribe(subscriptionList);
     }
 
     private void userSearchWindow() {

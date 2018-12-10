@@ -10,7 +10,7 @@ public class FileManager {
 
     private static final String ABSOLUTE_PATH = "Szofttech/src/storage/resources/";
 
-    public void remove(String originalFileName, String lineToDelete) throws IOException {
+    public void remove(String originalFileName, String[] linesToDelete) throws IOException {
         File temporaryFile = new File(ABSOLUTE_PATH + "temporaryFile.dat").getAbsoluteFile();
         File originalFile = new File( ABSOLUTE_PATH + originalFileName).getAbsoluteFile();
 
@@ -20,9 +20,11 @@ public class FileManager {
         ) {
             String line;
             while ( (line = reader.readLine()) != null ) {
-                if ( !line.equals(lineToDelete) ) {
-                    writer.write(line);
-                    writer.newLine();
+                for ( int i = 0; i < linesToDelete.length; i++ ) {
+                    if ( !line.equals(linesToDelete[i]) ) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
                 }
             }
         }

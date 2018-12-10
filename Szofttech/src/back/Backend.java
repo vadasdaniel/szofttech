@@ -9,6 +9,7 @@ import storage.subscribe.SubscribeManager;
 import storage.user.UserManager;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -96,7 +97,7 @@ public class Backend {
         return jobs;
     }
 
-    public void unsubscribe(Subscription subscription) {
+    public void unsubscribe(List<Subscription> subscription) {
         subscribeManager.delete(subscription);
     }
 }

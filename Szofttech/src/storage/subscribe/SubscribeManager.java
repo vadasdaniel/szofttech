@@ -49,10 +49,16 @@ public class SubscribeManager implements Manager<Subscription> {
     }
 
     @Override
-    public void delete(Subscription content) {
-        subscriptions.removeIf(subscription -> subscription.getId().equals(content.getId()));
+    public void delete(List<Subscription> content) {
+        String[] deleteContent = new String[content.size()];
+        content.forEach(remove -> subscriptions.removeIf(existing -> existing.getId().equals(remove.getId())));
+
+        for ( int i = 0; i < deleteContent.length; i++ ) {
+            deleteContent[i] = content.get(0).toString();
+        }
+
         try {
-            fileManager.remove(fileName, content.toString());
+            fileManager.remove(fileName, deleteContent);
             logger.info(logger.DELETED);
         } catch (IOException e) {
             logger.error(logger.FAILED_DELETE);
