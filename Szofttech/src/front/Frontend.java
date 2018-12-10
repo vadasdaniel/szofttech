@@ -4,6 +4,7 @@ import back.Backend;
 import common.Company;
 import common.JobAd;
 import common.Subscription;
+import common.User;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class Frontend {
         System.out.println("(1) Belépés");
         System.out.println("(2) Regisztráció");
         System.out.println("(3) Belépés vendégként");
-        System.out.println("(4) Kilépés");
+        System.out.println("(9) Kilépés");
 
         int menuItem = menuScanner.nextInt();
         switch (menuItem) {
@@ -49,7 +50,7 @@ public class Frontend {
             case 3:
                 guestWindow();
                 break;
-            case 4:
+            case 9:
                 setExitProgram(true);
                 break;
         }
@@ -101,13 +102,13 @@ public class Frontend {
     private void registrationWindow() {
         FrontendUtil.writeWindowHeader("Regisztráció");
 
-        System.out.print("Adja mega a nevét: ");
+        System.out.println("Adja mega a nevét: ");
         String name = scanner.next();
-        System.out.print("Adjon meg egy felhasználónevet: ");
+        System.out.println("Adjon meg egy felhasználónevet: ");
         String username = nullSafeIn();
-        System.out.print("Adja meg a jelszavát: ");
+        System.out.println("Adja meg a jelszavát: ");
         String password = scanner.next();
-        System.out.print("Felhasználó típus(Partnercég 1, Ügyfél 2)");
+        System.out.println("Felhasználó típus(Partnercég 1, Ügyfél 2)");
         Integer userType = menuScanner.nextInt();
 
         if (backend.registration(username, password, name, userType)) {
@@ -117,7 +118,118 @@ public class Frontend {
         }
     }
 
-    private void unsubscribeWindow() {
+    private void userMenu() {
+        FrontendUtil.writeWindowHeader("Ügyfél menü");
+        System.out.println("(1) Keresés");
+        System.out.println("(2) Lejelentkezés hírdetéstről");
+        System.out.println("(9) Kijelentkezés");
+        int choose = menuScanner.nextInt();
+        switch (choose) {
+            case 1:
+                break;
+            case 2:
+                unsubscribe();
+                userMenu();
+                break;
+            case 9:
+                mainWindow();
+                break;
+        }
+    }
+
+    private void partnerCompanyMenu() {
+        FrontendUtil.writeWindowHeader("Partnercég menü");
+        System.out.println("(1) Keresés");
+        System.out.println("(2) Hírdetés létrehozása");
+        System.out.println("(3) Jelentkező elbírálása");
+        System.out.println("(4) Hírdetés törlése");
+        System.out.println("(9) Kijelentkezés");
+        int choose = menuScanner.nextInt();
+        switch (choose) {
+            case 1:
+                searchPartnerCompany();
+                partnerCompanyMenu();;
+                break;
+            case 2:
+                createJobAd();
+                break;
+            case 3:
+                applicantConfiscation();
+                break;
+            case 4:
+                deleteJobAd();
+                break;
+            case 9:
+                mainWindow();
+                break;
+        }
+    }
+
+    private void adminMenu() {
+        FrontendUtil.writeWindowHeader("Admin menü");
+        System.out.println("(1) Keresés");
+        System.out.println("(2) Statisztika");
+        System.out.println("(3) Hírdetés törlés");
+        System.out.println("(4) Felhasználó törlés");
+        System.out.println("(9) Kijelentkezés");
+        int choose = menuScanner.nextInt();
+        switch (choose) {
+            case 1:
+                searchAdmin();
+                adminMenu();
+                break;
+            case 2:
+                statistics();
+                adminMenu();
+                break;
+            case 3:
+                deleteJobAd();
+                adminMenu();
+                break;
+            case 4:
+                deleteUser();
+                adminMenu();
+                break;
+            case 9:
+                mainWindow();
+                break;
+        }
+    }
+
+    private void listJobAds() {
+        FrontendUtil.writeWindowHeader("Hirdetések listázása");
+        Boolean isEmpty = backend.listJobAds();
+
+        if (isEmpty) {
+            System.out.println("Nincsenek hirdetések.");
+        }
+    }
+
+    private void deleteUser() {
+        FrontendUtil.writeWindowHeader("Felhasználó törlés");
+
+        List<User> users = backend.getUsers();
+
+        if ( users.isEmpty() ) {
+            FrontendUtil.writeWarningMessage("Nem található felhasználó.");
+        } else {
+            System.out.println("Index | Név | Felhasználónév");
+            for ( int i = 0; i < users.size(); i++ ) {
+                User user = users.get(i);
+                System.out.println(i + "  " + user.getName() + "  " + user.getUsername());
+            }
+
+            System.out.println("Felhasználó index: ");
+            Integer index = scanner.nextInt();
+            User userToDelete = null;
+            for ( int i = 0; i < users.size(); i++ ) {
+                userToDelete = users.get(index);
+            }
+            backend.deleteUser(userToDelete);
+        }
+    }
+
+    private void unsubscribe() {
         FrontendUtil.writeWindowHeader("Lejelentkezés hirdetésről");
         Map<JobAd, Subscription> subscriptions = backend.getUserSubscriptions();
         System.out.println("Index | Cég neve | Munka neve | Leírás");
@@ -142,111 +254,67 @@ public class Frontend {
         backend.unsubscribe(subscriptionList);
     }
 
-    private void userSearchWindow() {
-        FrontendUtil.writeWindowHeader("Keresés");
-
-        System.out.println("(1) Hirdetések között");
-        System.out.println("(2) Saját jelentkezések");
-        Integer menuItem = menuScanner.nextInt();
-
-        switch (menuItem) {
-            case 1:
-                searchInJobAds();
-                break;
-            case 2:
-
-                break;
-        }
-    }
-
-    private void userMenu() {
-        FrontendUtil.writeWindowHeader("Ügyfél menü");
-        System.out.println("(1) Keresés");
-        System.out.println("(2) Lejelentkezés hírdetéstről");
-        System.out.println("(9) Kijelentkezés");
-        int choose = menuScanner.nextInt();
-        switch (choose) {
-            case 1:
-                userSearchWindow();
-                break;
-            case 2:
-                unsubscribeWindow();
-                userMenu();
-                break;
-            case 9:
-                mainWindow();
-        }
-    }
-
-    private void partnerCompanyMenu() {
-        FrontendUtil.writeWindowHeader("Partnercég menü");
-        System.out.println("(1) Hírdetések keresése\n" +
-                "(2) Hírdetés létrehozása\n" +
-                "(3) Jelentkező elbírálása\n" +
-                "(4) Hírdetés törlése\n" +
-                "(9) Kilépés");
-        int choose = menuScanner.nextInt();
-        switch (choose) {
-            case 1:
-                searchInJobAds();
-                break;
-            case 2:
-                createJobAd();
-                break;
-            case 3:
-                applicantConfiscation();
-                break;
-            case 4:
-                deleteJobAd();
-                break;
-            case 9:
-                logout();
-                break;
-        }
-    }
-
-    private void adminMenu() {
-        FrontendUtil.writeWindowHeader("Admin menü");
-        System.out.println("(1) Keresés\n" +
-                "(2) Statisztika\n" +
-                "(3) Hírdetés tölés\n" +
-                "(4) Felhasználó törlés\n");
-        int choose = menuScanner.nextInt();
-        switch (choose) {
-            case 1:
-                search();
-                break;
-            case 2:
-                statistics();
-                break;
-            case 3:
-                deleteJobAd();
-                break;
-            case 4:
-                deleteUser();
-                break;
-
-        }
-    }
-
-    private void listJobAds() {
-        FrontendUtil.writeWindowHeader("Hirdetések listázása");
-        Boolean isEmpty = backend.listJobAds();
-
-        if (isEmpty) {
-            System.out.println("Nincsenek hirdetések.");
-        }
-    }
-
-    private void deleteUser() {
-
-    }
-
     private void statistics() {
+        FrontendUtil.writeWindowHeader("Statisztika");
 
+        System.out.println("Felhasználók száma: " + backend.getUsers().size());
+        System.out.println("Cégek száma: " + backend.getCompanies().size());
+        System.out.println("Hirdetések száma: " + backend.getJobAds().size());
     }
 
-    private void search() {
+    private void searchAdmin() {
+        FrontendUtil.writeWindowHeader("Admin keresés");
+        System.out.println("(1) Felhasználók között");
+        System.out.println("(2) Cégek között");
+        System.out.println("(3) Hírdetés között");
+        Integer menuOption = scanner.nextInt();
+
+        switch (menuOption) {
+            case 1:
+                FrontendUtil.writeWindowHeader("Felhasználő keresés");
+                System.out.print("Felhasználó neve: ");
+                String username = scanner.next();
+                User user = backend.getUserByUsername(username);
+
+                if ( user.getId() != null ) {
+                    System.out.println("\n--- FELHASZNÁLÓ ---");
+                    System.out.println("Felhasználónév: " + user.getUsername());
+                    System.out.println("Név: " + user.getName());
+                    System.out.println("Típus: " + user.getUserType().toString());
+                } else {
+                    System.out.println("A keresett felhasználó nem található.");
+                }
+                break;
+            case 2:
+                FrontendUtil.writeWindowHeader("Cég keresés");
+                System.out.print("Cég neve: ");
+                String companyName = scanner.next();
+                Company company = backend.getCompanyBaName(companyName);
+
+                if ( company.getId() != null ) {
+                    System.out.println("\n--- CÉG ---");
+                    System.out.println("Név: " + company.getName());
+                } else {
+                    System.out.println("A keresett cég nem található.");
+                }
+                break;
+            case 3:
+                FrontendUtil.writeWindowHeader("Hírdetés keresés");
+                System.out.print("Hírdetés neve: ");
+                String adName = scanner.next();
+                JobAd jobAd = backend.getJobAdByName(adName);
+
+                if ( jobAd.getId() != null ) {
+                    Company creator = backend.getCompany(jobAd.getCompanyId());
+                    System.out.println("\n--- HÍRDETÉS ---");
+                    System.out.println("Név: " + jobAd.getName());
+                    System.out.println("Leírás: " + jobAd.getJobDescription());
+                    System.out.println("Feladó: " + creator.getName());
+                } else {
+                    System.out.println("A keresett hírdetés nem található.");
+                }
+                break;
+        }
 
     }
 
@@ -269,8 +337,42 @@ public class Frontend {
         partnerCompanyMenu();
     }
 
-    private void searchInJobAds() {
+    private void searchPartnerCompany() {
+        FrontendUtil.writeWindowHeader("Kereső");
+        System.out.println("(1) Saját hírdetés");
+        System.out.println("(2) Jelentkezők");
+        Integer menuOption = scanner.nextInt();
 
+        switch (menuOption) {
+            case 1:
+                System.out.print("Hírdetés neve: ");
+                String adName = scanner.next();
+                String companyId = backend.getCompanyIdByUserId(backend.getLoggedInUser().getId());
+                JobAd jobAd = backend.getJobAdByNameAndCompanyId(adName, companyId);
+
+                if ( jobAd.getId() != null ) {
+                    System.out.println("\n--- HÍRDETÉS ---");
+                    System.out.println("Név: " + jobAd.getName());
+                    System.out.println("Leírás: " + jobAd.getJobDescription());
+                } else {
+                    System.out.println("A keresett hírdetés nem található.");
+                }
+                break;
+            case 2:
+                System.out.print("Jelentkező neve: ");
+                String applicant = scanner.next();
+
+                User user = backend.getApplicantByUsername(applicant);
+                if (user != null) {
+                    System.out.println("\n--- FELHASZNÁLÓ ---");
+                    System.out.println("Név: " + user.getName());
+                    System.out.println("Felhasználónév: " + user.getUsername());
+                } else {
+                    System.out.println("A keresett jelentkező nem található");
+
+                }
+                break;
+        }
     }
 
     private void deleteJobAd() {
@@ -291,10 +393,6 @@ public class Frontend {
         }
 
 
-    }
-
-    private void logout(){
-        mainWindow();
     }
 
     private String nullSafeIn(){

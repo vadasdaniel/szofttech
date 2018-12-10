@@ -93,4 +93,17 @@ public class CompanyManager implements Manager<Company> {
                 .get(0);
     }
 
+    public Company getByName(String name) {
+        try {
+            return companies
+                    .stream()
+                    .filter(company -> company.getName().equals(name))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception e) {
+            logger.error(logger.WRONG_INPUT);
+            return null;
+        }
+    }
+
 }

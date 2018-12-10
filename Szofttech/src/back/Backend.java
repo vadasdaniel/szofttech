@@ -99,6 +99,24 @@ public class Backend {
         subscribeManager.delete(subscription);
     }
 
+    public List<Company> getCompanies() {
+        return companyManager.list();
+    }
+
+    public List<JobAd> getJobAds() {
+        return jobAdManager.list();
+    }
+
+    public List<User> getUsers() {
+        return userManager.list();
+    }
+
+    public void deleteUser(User user) {
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        userManager.delete(users);
+    }
+
     public String getCompanyIdByUserId(String userId) {
         return companyManager.getByUserId(userId).getId();
     }
@@ -111,8 +129,51 @@ public class Backend {
         return jobAdManager.get(id);
     }
 
+    public List<JobAd> getJobAdsByCompanyId(String id) {
+        return jobAdManager.getByCompanyId(id);
+    }
+
     public Company getCompany(String id) {
         return companyManager.get(id);
+    }
+
+    public User getUserByUsername(String username) {
+        return userManager.getByUsername(username);
+    }
+
+    public Company getCompanyBaName(String name) {
+        return companyManager.getByName(name);
+    }
+
+    public JobAd getJobAdByName(String name) {
+        return jobAdManager.getByName(name);
+    }
+
+    public JobAd getJobAdByNameAndCompanyId(String name, String companyId) {
+        return jobAdManager.getByNameAndCompanyId(name, companyId);
+    }
+
+    public User getApplicantByUsername(String username) {
+
+        String userId = loginSession.getUser().getId();
+        String companyId = getCompanyIdByUserId(userId);
+
+        List<JobAd> jobAds = getJobAdsByCompanyId(companyId);
+        User user = null;
+
+        for (JobAd jobAd : jobAds) {
+            List<Subscription> subscriptions = subscribeManager.getByJobId(jobAd.getId());
+
+            for (Subscription subscription: subscriptions) {
+                User find = userManager.get(subscription.getUserId());
+
+                if ( find.getUsername().equals(username) ) {
+                    user = find;
+                }
+            }
+        }
+
+        return user;
     }
 
     public void deleteJobAd(String[] serialNumbers) {

@@ -95,4 +95,11 @@ public class SubscribeManager implements Manager<Subscription> {
     public List<Subscription> list() {
         return subscriptions;
     }
+
+    public List<Subscription> getByJobId(String id) {
+        return subscriptions
+                .stream()
+                .filter(subscription -> subscription.getJobAdId().equals(id))
+                .collect(Collectors.toList());
+    }
 }

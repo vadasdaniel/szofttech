@@ -88,4 +88,37 @@ public class JobAdManager implements Manager<JobAd> {
     public List<JobAd> list() {
         return jobAds;
     }
+
+    public JobAd getByName(String name) {
+        try {
+            return jobAds
+                    .stream()
+                    .filter(jobAd -> jobAd.getName().equals(name))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception e) {
+            logger.error(logger.WRONG_INPUT);
+            return null;
+        }
+    }
+
+    public JobAd getByNameAndCompanyId(String name, String companyId) {
+        try {
+            return jobAds
+                    .stream()
+                    .filter(jobAd -> jobAd.getName().equals(name) && jobAd.getCompanyId().equals(companyId))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception e) {
+            logger.error(logger.WRONG_INPUT);
+            return null;
+        }
+    }
+
+    public List<JobAd> getByCompanyId(String id) {
+        return jobAds
+                .stream()
+                .filter(jobAd -> jobAd.getCompanyId().equals(id))
+                .collect(Collectors.toList());
+    }
 }

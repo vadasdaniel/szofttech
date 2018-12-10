@@ -105,4 +105,17 @@ public class UserManager implements Manager<User> {
             return null;
         }
     }
+
+    public User getByUsername(String username) {
+        try {
+            return users
+                    .stream()
+                    .filter(user -> user.getUsername().equals(username))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception e) {
+            logger.error(logger.WRONG_INPUT);
+            return null;
+        }
+    }
 }
