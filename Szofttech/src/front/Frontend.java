@@ -123,12 +123,13 @@ public class Frontend {
 
     private void userMenu() {
         FrontendUtil.writeWindowHeader("Ügyfél menü");
-        System.out.println("(1) Keresés");
+        System.out.println("(1) Jelentkezés hirdetésre");
         System.out.println("(2) Lejelentkezés hírdetéstről");
         System.out.println("(9) Kijelentkezés");
         int choose = menuScanner.nextInt();
         switch (choose) {
             case 1:
+                subscribe();
                 break;
             case 2:
                 unsubscribe();
@@ -453,6 +454,18 @@ public class Frontend {
                     adminMenu();
                 }
             }
+        }
+    }
+
+    private void subscribe(){
+        if(backend.listJobAds()) {
+            System.out.println("Jelenleg nincs aktív hirdetés.");
+            userMenu();
+        } else {
+            System.out.println("Kérem a hirdetés sorszámát:");
+            int serialNum = menuScanner.nextInt();
+            backend.subscribe(serialNum);
+            userMenu();
         }
     }
 

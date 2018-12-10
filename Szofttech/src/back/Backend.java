@@ -212,4 +212,12 @@ public class Backend {
 
         handledSubscriptionsManager.add(newSubscription);
     }
+
+    public void subscribe(int serialNum){
+        Subscription subscription = new Subscription(UUID.randomUUID().toString(),
+                                                    jobAdManager.list().get(serialNum).getId(),
+                                                    loginSession.getUser().getId(),
+                                                    SubscriptionStateType.ACTIVE);
+        subscribeManager.add(subscription);
+    }
 }
