@@ -35,6 +35,8 @@ public class Backend {
         User user = userManager.getByUsernameAndPassword(username, password);
         if ( user != null ) {
             loginSession = new LoginSession(UUID.randomUUID().toString(), user);
+        } else {
+            loginSession = new LoginSession(null, user);
         }
 
         return loginSession.isUserLoggedIn();
