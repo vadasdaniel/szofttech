@@ -1,6 +1,7 @@
 package back;
 
 import common.*;
+import common.enums.SubscriptionStateType;
 import common.enums.UserType;
 import storage.company.CompanyManager;
 import storage.handledSubscribtions.HandledSubscriptionsManager;
@@ -9,6 +10,7 @@ import storage.subscribe.SubscribeManager;
 import storage.user.UserManager;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
@@ -182,5 +184,32 @@ public class Backend {
             jobsToRemove.add(jobAdManager.list().get(parseInt(serialNumbers[i])));
         }
         jobAdManager.delete(jobsToRemove);
+    }
+
+    public List<Subscription> getSubscriptionsByJobAdId(String id) {
+        return subscribeManager
+                .list()
+                .stream()
+                .filter(subscription -> subscription.getJobAdId().equals(id))
+                .collect(Collectors.toList());
+    }
+
+    public User getUserByUserId(String id) {
+        return userManager.get(id);
+    }
+
+    public void moveSubscriptionToHandled(Subscription subscription, SubscriptionStateType state) {
+        List<Subscription> subscriptions = new ArrayList<>();
+        subscriptions.add(subscription);
+        subscribeManager.delete(subscriptions);
+
+        Subscription newSubscription = new Subscription(
+                UUID.randomUUID().toString(),
+                subscription.getJobAdId(),
+                subscription.getUserId(),
+                state
+        );
+
+        handledSubscriptionsManager.add(newSubscription);
     }
 }

@@ -5,6 +5,7 @@ import common.Company;
 import common.JobAd;
 import common.Subscription;
 import common.User;
+import common.enums.SubscriptionStateType;
 import common.enums.UserType;
 
 import java.util.*;
@@ -59,9 +60,9 @@ public class Frontend {
 
     private void loginWindow() {
         FrontendUtil.writeWindowHeader("Bejelentkezés");
-        System.out.print("Adja meg a felhasználónevét: ");
+        System.out.println("Adja meg a felhasználónevét: ");
         String username = scanner.next();
-        System.out.print("Adja meg a jelszavát: ");
+        System.out.println("Adja meg a jelszavát: ");
         String password = scanner.next();
 
         if (backend.loginUser(username, password)) {
@@ -150,13 +151,12 @@ public class Frontend {
         switch (choose) {
             case 1:
                 searchPartnerCompany();
-                partnerCompanyMenu();;
                 break;
             case 2:
                 createJobAd();
                 break;
             case 3:
-                applicantConfiscation();
+                applicantConfiscationWindow();
                 break;
             case 4:
                 deleteJobAd();
@@ -178,19 +178,15 @@ public class Frontend {
         switch (choose) {
             case 1:
                 searchAdmin();
-                adminMenu();
                 break;
             case 2:
                 statistics();
-                adminMenu();
                 break;
             case 3:
                 deleteJobAd();
-                adminMenu();
                 break;
             case 4:
                 deleteUser();
-                adminMenu();
                 break;
             case 9:
                 mainWindow();
@@ -228,6 +224,7 @@ public class Frontend {
                 userToDelete = users.get(index);
             }
             backend.deleteUser(userToDelete);
+            adminMenu();
         }
     }
 
@@ -262,6 +259,7 @@ public class Frontend {
         System.out.println("Felhasználók száma: " + backend.getUsers().size());
         System.out.println("Cégek száma: " + backend.getCompanies().size());
         System.out.println("Hirdetések száma: " + backend.getJobAds().size());
+        adminMenu();
     }
 
     private void searchAdmin() {
@@ -285,6 +283,7 @@ public class Frontend {
                     System.out.println("Típus: " + user.getUserType().toString());
                 } else {
                     System.out.println("A keresett felhasználó nem található.");
+                    adminMenu();
                 }
                 break;
             case 2:
@@ -298,6 +297,7 @@ public class Frontend {
                     System.out.println("Név: " + company.getName());
                 } else {
                     System.out.println("A keresett cég nem található.");
+                    adminMenu();
                 }
                 break;
             case 3:
@@ -314,14 +314,62 @@ public class Frontend {
                     System.out.println("Feladó: " + creator.getName());
                 } else {
                     System.out.println("A keresett hírdetés nem található.");
+                    adminMenu();
                 }
                 break;
         }
 
     }
 
-    private void applicantConfiscation() {
+    private void applicantConfiscationWindow() {
+        FrontendUtil.writeWindowHeader("Jelentkezés elbírálás");
 
+        String userId = backend.getLoggedInUser().getId();
+        String companyId = backend.getCompanyIdByUserId(userId);
+        List<JobAd> jobAds = backend.getJobAdsByCompanyId(companyId);
+
+        System.out.println("Index | Hírdetés neve | Jelentkezők száma");
+
+        for ( int i = 0; i < jobAds.size(); i++ ) {
+            JobAd jobAd = jobAds.get(i);
+            List<Subscription> subscriptions = backend.getSubscriptionsByJobAdId(jobAd.getId());
+            System.out.println(i + " | " + jobAd.getName() + " | " + subscriptions.size());
+        }
+
+        System.out.println("Hírdetés indexe: ");
+        Integer index = scanner.nextInt();
+
+        applicantConfiscation(jobAds.get(index));
+        partnerCompanyMenu();
+    }
+
+    private void applicantConfiscation(JobAd jobAd) {
+        List<Subscription> subscriptions = backend.getSubscriptionsByJobAdId(jobAd.getId());
+
+        System.out.println("Index | Jelentkező");
+        for ( int i = 0; i < subscriptions.size(); i++ ) {
+            Subscription subscription = subscriptions.get(i);
+            User user = backend.getUserByUserId(subscription.getUserId());
+            System.out.println(i + " | " + user.getName());
+        }
+
+        System.out.println("Jelentkező indexe: ");
+        Integer index = scanner.nextInt();
+        System.out.println("1 - Elfogadás | 2 - Elutasítás");
+        Integer choice = scanner.nextInt();
+
+        SubscriptionStateType state = null;
+
+        switch (choice) {
+            case 1:
+                state = SubscriptionStateType.ACCEPTED;
+                break;
+            case 2:
+                state = SubscriptionStateType.DENIED;
+                break;
+        }
+
+        backend.moveSubscriptionToHandled(subscriptions.get(index), state);
     }
 
     private void createJobAd() {
@@ -358,6 +406,7 @@ public class Frontend {
                     System.out.println("Leírás: " + jobAd.getJobDescription());
                 } else {
                     System.out.println("A keresett hírdetés nem található.");
+                    partnerCompanyMenu();
                 }
                 break;
             case 2:
@@ -371,7 +420,7 @@ public class Frontend {
                     System.out.println("Felhasználónév: " + user.getUsername());
                 } else {
                     System.out.println("A keresett jelentkező nem található");
-
+                    partnerCompanyMenu();
                 }
                 break;
         }
