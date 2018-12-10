@@ -72,11 +72,10 @@ public class Backend {
     }
 
     public Boolean listJobAds() {
-        System.out.println("Hirdetés neve | Cég neve | Munka leírás");
-
         if (jobAdManager.list().isEmpty()) {
             return true;
         } else {
+            System.out.println("Hirdetés neve | Cég neve | Munka leírás");
             jobAdManager.list()
                     .forEach(jobAd -> {
                         Company adCreator = companyManager.get(jobAd.getCompanyId());
@@ -99,5 +98,13 @@ public class Backend {
 
     public void unsubscribe(List<Subscription> subscription) {
         subscribeManager.delete(subscription);
+    }
+
+    public JobAd getJobAd(String id) {
+        return jobAdManager.get(id);
+    }
+
+    public Company getCompany(String id) {
+        return companyManager.get(id);
     }
 }
