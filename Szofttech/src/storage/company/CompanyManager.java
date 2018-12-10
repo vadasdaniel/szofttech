@@ -31,9 +31,9 @@ public class CompanyManager implements Manager<Company> {
             for (String data: datas) {
                 String[] dataColumn = data.split(",");
                 Company company = new Company(
-                        dataColumn[0],
-                        dataColumn[1],
-                        dataColumn[2]
+                        dataColumn[0].trim(),
+                        dataColumn[1].trim(),
+                        dataColumn[2].trim()
                     );
                 companies.add(company);
             }
@@ -82,4 +82,15 @@ public class CompanyManager implements Manager<Company> {
     public List<Company> list() {
         return companies;
     }
+
+    public Company getByUserId(String userId){
+        System.out.println(userId);
+        System.out.println(companies);
+        return companies
+                .stream()
+                .filter(company -> company.getUserId().equals(userId))
+                .collect(Collectors.toList())
+                .get(0);
+    }
+
 }

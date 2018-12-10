@@ -30,10 +30,10 @@ public class JobAdManager implements Manager<JobAd> {
             for (String data : datas) {
                 String[] dataColumn = data.split(",");
                 JobAd job = new JobAd(
-                        dataColumn[0],
-                        dataColumn[1],
-                        dataColumn[2],
-                        dataColumn[3]
+                        dataColumn[0].trim(),
+                        dataColumn[1].trim(),
+                        dataColumn[2].trim(),
+                        dataColumn[3].trim()
                 );
                 jobAds.add(job);
             }

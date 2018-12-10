@@ -42,11 +42,11 @@ public class Logger {
             for (String data : datas) {
                 String[] dataColumn = data.split(",");
                 Log log = new Log(
-                        dataColumn[0], // id
-                        dataColumn[1], // date
-                        dataColumn[2], // type
-                        dataColumn[3], // from
-                        dataColumn[4]  // text
+                        dataColumn[0].trim(), // id
+                        dataColumn[1].trim(), // date
+                        dataColumn[2].trim(), // type
+                        dataColumn[3].trim(), // from
+                        dataColumn[4].trim()  // text
                 );
                 logs.add(log);
             }

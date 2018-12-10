@@ -4,10 +4,7 @@ import back.Backend;
 import common.JobAd;
 import common.Subscription;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Frontend {
 
@@ -104,11 +101,7 @@ public class Frontend {
         System.out.print("Adja mega a nevét: ");
         String name = scanner.next();
         System.out.print("Adjon meg egy felhasználónevet: ");
-        String username;
-        while (true) {
-            username = scanner.next();
-            if (username != null) break;
-        }
+        String username = nullSafeIn();
         System.out.print("Adja meg a jelszavát: ");
         String password = scanner.next();
         System.out.print("Felhasználó típus(Partnercég 1, Ügyfél 2)");
@@ -158,7 +151,8 @@ public class Frontend {
     private void userMenu() {
         FrontendUtil.writeWindowHeader("Ügyfél menü");
         System.out.println("(1) Keresés\n" +
-                "(2) Lejelentkezés hírdetéstről");
+                "(2) Lejelentkezés hírdetéstről" +
+                "(9) Kilépés");
         int choose = scanner.nextInt();
         switch (choose) {
             case 1:
@@ -167,6 +161,8 @@ public class Frontend {
             case 2:
                 unsubscribeWindow();
                 break;
+            case 9:
+                mainWindow();
         }
     }
 
@@ -175,7 +171,8 @@ public class Frontend {
         System.out.println("(1) Hírdetések keresése\n" +
                 "(2) Hírdetés létrehozása\n" +
                 "(3) Jelentkező elbírálása\n" +
-                "(4) Hírdetés törlése");
+                "(4) Hírdetés törlése\n" +
+                "(9) Kilépés");
         int choose = scanner.nextInt();
         switch (choose) {
             case 1:
@@ -189,6 +186,9 @@ public class Frontend {
                 break;
             case 4:
                 deleteJobAd();
+                break;
+            case 9:
+                logout();
                 break;
         }
     }
@@ -243,7 +243,18 @@ public class Frontend {
     }
 
     private void createJobAd() {
+        System.out.println("Kérem adja meg a következő adatokat!\nHírdetés neve:");
+        String adName = nullSafeIn();
+        System.out.println("Hírdetés leírása:");
+        String adDesc = nullSafeIn();
 
+        JobAd jobAd = new JobAd(UUID.randomUUID().toString(),
+                                backend.getCompanyIdByUserId(backend.getLoggedInUser().getId()),
+                                adName,
+                                adDesc);
+
+        backend.saveJobAd(jobAd);
+        partnerCompanyMenu();
     }
 
     private void searchInJobAds() {
@@ -251,6 +262,27 @@ public class Frontend {
     }
 
     private void deleteJobAd() {
+        backend.listJobAds();
+        System.out.println("Kérem a törölni kívánt hírdetés sorszámait ( ','-vel elválasztva)");
+        String serialNumbers = scanner.next();
+        if (serialNumbers != null) {
+            
+        } else {
+            partnerCompanyMenu();
+        }
 
+    }
+
+    private void logout(){
+        mainWindow();
+    }
+
+    private String nullSafeIn(){
+        String tmp;
+        while (true) {
+            tmp = scanner.next();
+            if (tmp != null) break;
+        }
+        return tmp;
     }
 }
