@@ -1,6 +1,7 @@
 package back;
 
 import common.*;
+import common.enums.SubscriptionStateType;
 import common.enums.UserType;
 import storage.company.CompanyManager;
 import storage.handledSubscribtions.HandledSubscriptionsManager;
@@ -182,5 +183,13 @@ public class Backend {
             jobsToRemove.add(jobAdManager.list().get(parseInt(serialNumbers[i])));
         }
         jobAdManager.delete(jobsToRemove);
+    }
+
+    public void subscribe(int serialNum){
+        Subscription subscription = new Subscription(UUID.randomUUID().toString(),
+                                                    jobAdManager.list().get(serialNum).getId(),
+                                                    loginSession.getUser().getId(),
+                                                    SubscriptionStateType.ACTIVE);
+        subscribeManager.add(subscription);
     }
 }
