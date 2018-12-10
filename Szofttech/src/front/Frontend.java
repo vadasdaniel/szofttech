@@ -19,8 +19,8 @@ public class Frontend {
         this.backend = backend;
     }
 
-    public void start()  {
-        while(!exitProgram) {
+    public void start() {
+        while (!exitProgram) {
             FrontendUtil.writeWindowHeader("Üdvözöljük a Munkaközvetítő cégnél");
             mainWindow();
         }
@@ -61,7 +61,7 @@ public class Frontend {
         System.out.print("Adja meg a jelszavát: ");
         String password = scanner.next();
 
-        if ( backend.loginUser(username, password) ) {
+        if (backend.loginUser(username, password)) {
             switch (backend.getLoggedInUser().getUserType()) {
                 case USER:
                     userMenu();
@@ -103,13 +103,17 @@ public class Frontend {
         System.out.print("Adja mega a nevét: ");
         String name = scanner.next();
         System.out.print("Adjon meg egy felhasználónevet: ");
-        String username = scanner.next();
+        String username;
+        while (true) {
+            username = scanner.next();
+            if (username != null) break;
+        }
         System.out.print("Adja meg a jelszavát: ");
         String password = scanner.next();
         System.out.print("Felhasználó típus(Partnercég 1, Ügyfél 2)");
         Integer userType = scanner.nextInt();
 
-        if ( backend.registration(username, password, name, userType) ) {
+        if (backend.registration(username, password, name, userType)) {
             mainWindow();
         } else {
             FrontendUtil.writeErrorMessage("Nem sikerült a regisztrációt.");
@@ -210,7 +214,7 @@ public class Frontend {
         System.out.println("\n Hírdetések listázása!\n");
         Boolean isEmpty = backend.listJobAds();
 
-        if ( isEmpty ) {
+        if (isEmpty) {
             System.out.println("Nincsenek hirdetések.");
         }
     }
