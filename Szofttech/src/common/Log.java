@@ -40,4 +40,8 @@ public class Log {
     public String toString() {
         return "Log(" + id + "):\n" + date + " " + type + " in " + from + "\nMessage: " + text;
     }
+
+    public String toLogSave() {
+        return id + "," + date + "," + type + "," + from + "," + text;
+    }
 }

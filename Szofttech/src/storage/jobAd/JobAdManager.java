@@ -15,7 +15,7 @@ public class JobAdManager implements Manager<JobAd> {
     private static final String fileName = "ads.dat";
     private FileManager fileManager;
     private List<JobAd> jobAds;
-    Logger logger = new Logger(fileManager, this.getClass().getName());
+    Logger logger = new Logger(this.getClass().getName());
 
     public JobAdManager(FileManager fileManager) {
         this.fileManager = fileManager;

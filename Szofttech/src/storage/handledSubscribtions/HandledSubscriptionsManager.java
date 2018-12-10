@@ -16,7 +16,7 @@ public class HandledSubscriptionsManager implements Manager<Subscription> {
     private static final String fileName = "subscriptions.dat";
     private FileManager fileManager;
     private List<Subscription> handledSubscriptions;
-    Logger logger = new Logger(fileManager, this.getClass().getName());
+    Logger logger = new Logger(this.getClass().getName());
 
     public HandledSubscriptionsManager(FileManager fileManager) {
         this.fileManager = fileManager;

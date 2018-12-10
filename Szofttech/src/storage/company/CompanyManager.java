@@ -15,7 +15,7 @@ public class CompanyManager implements Manager<Company> {
     private static final String fileName = "companies.dat";
     private List<Company> companies;
     private FileManager fileManager;
-    Logger logger = new Logger(fileManager, this.getClass().getName());
+    Logger logger = new Logger(this.getClass().getName());
 
     public CompanyManager(FileManager fileManager) {
         this.fileManager = fileManager;

@@ -1,5 +1,7 @@
 package back;
 
+import storage.log.Logger;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,8 @@ public class FileManager {
         try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
             output.write(content);
             output.newLine();
+        } catch (Exception e) {
+            System.out.println("BALFASZ");
         }
     }
 

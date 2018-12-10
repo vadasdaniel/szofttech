@@ -16,7 +16,7 @@ public class UserManager implements Manager<User> {
     private static final String fileName = "users.dat";
     private FileManager fileManager;
     private List<User> users;
-    Logger logger = new Logger(fileManager, this.getClass().getName());
+    Logger logger = new Logger(this.getClass().getName());
 
     public UserManager(FileManager fileManager) {
         this.fileManager = fileManager;

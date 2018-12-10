@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 public class Logger implements Manager<Log> {
 
-
     public final String NOT_FOUND = "Nem található!";
     public final String DATABASE_NOT_FOUND = "Az adatbázis nem található!";
     public final String FAILED_DELETE = "Sikertelen törlés";
@@ -31,10 +30,10 @@ public class Logger implements Manager<Log> {
     private List<Log> logs;
     private String className;
 
-    public Logger(FileManager fileManager, String className) {
-        this.fileManager = fileManager;
+    public Logger(String className) {
+        this.fileManager = new FileManager();
         this.className = className;
-//        readData();
+        readData();
     }
 
     @Override
@@ -70,10 +69,8 @@ public class Logger implements Manager<Log> {
 
     @Override
     public void add(Log content) {
-        System.out.println(content);
-
         try {
-            fileManager.add(fileName, content.toString());
+            fileManager.add(fileName, content.toLogSave());
         } catch (IOException e) {
             exceptionManager.error("Hiba a log hozzáadása közben.");
         }
@@ -103,7 +100,6 @@ public class Logger implements Manager<Log> {
         Log log = new Log(UUID.randomUUID().toString(), LocalDate.now().toString(), "Error", className, errorMessage);
         add(log);
         logs.add(log);
-
     }
 
     public void info(String errorMessage) {
