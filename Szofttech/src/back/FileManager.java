@@ -42,7 +42,7 @@ public class FileManager {
             output.write(content);
             output.newLine();
         } catch (Exception e) {
-            System.out.println("BALFASZ");
+
         }
     }
 
