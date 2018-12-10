@@ -12,9 +12,11 @@ public class Frontend {
     private Boolean exitProgram = false;
     private Scanner scanner;
     private Backend backend;
+    private Scanner menuScanner;
 
     public Frontend(Backend backend) {
         this.scanner = new Scanner(System.in);
+        this.menuScanner = new Scanner(System.in);
         this.backend = backend;
     }
 
@@ -36,7 +38,7 @@ public class Frontend {
         System.out.println("(3) Belépés vendégként");
         System.out.println("(4) Kilépés");
 
-        int menuItem = scanner.nextInt();
+        int menuItem = menuScanner.nextInt();
         switch (menuItem) {
             case 1:
                 loginWindow();
@@ -83,7 +85,7 @@ public class Frontend {
         System.out.println("(1) Hirdetés listázás");
         System.out.println("(2) Főoldal");
 
-        int menuOption = scanner.nextInt();
+        int menuOption = menuScanner.nextInt();
 
         switch (menuOption) {
             case 1:
@@ -106,7 +108,7 @@ public class Frontend {
         System.out.print("Adja meg a jelszavát: ");
         String password = scanner.next();
         System.out.print("Felhasználó típus(Partnercég 1, Ügyfél 2)");
-        Integer userType = scanner.nextInt();
+        Integer userType = menuScanner.nextInt();
 
         if (backend.registration(username, password, name, userType)) {
             mainWindow();
@@ -145,7 +147,7 @@ public class Frontend {
 
         System.out.println("(1) Hirdetések között");
         System.out.println("(2) Saját jelentkezések");
-        Integer menuItem = scanner.nextInt();
+        Integer menuItem = menuScanner.nextInt();
 
         switch (menuItem) {
             case 1:
@@ -162,7 +164,7 @@ public class Frontend {
         System.out.println("(1) Keresés");
         System.out.println("(2) Lejelentkezés hírdetéstről");
         System.out.println("(9) Kijelentkezés");
-        int choose = scanner.nextInt();
+        int choose = menuScanner.nextInt();
         switch (choose) {
             case 1:
                 userSearchWindow();
@@ -183,7 +185,7 @@ public class Frontend {
                 "(3) Jelentkező elbírálása\n" +
                 "(4) Hírdetés törlése\n" +
                 "(9) Kilépés");
-        int choose = scanner.nextInt();
+        int choose = menuScanner.nextInt();
         switch (choose) {
             case 1:
                 searchInJobAds();
@@ -209,7 +211,7 @@ public class Frontend {
                 "(2) Statisztika\n" +
                 "(3) Hírdetés tölés\n" +
                 "(4) Felhasználó törlés\n");
-        int choose = scanner.nextInt();
+        int choose = menuScanner.nextInt();
         switch (choose) {
             case 1:
                 search();
@@ -272,14 +274,22 @@ public class Frontend {
     }
 
     private void deleteJobAd() {
-        backend.listJobAds();
-        System.out.println("Kérem a törölni kívánt hírdetés sorszámait ( ','-vel elválasztva)");
-        String serialNumbers = scanner.next();
-        if (serialNumbers != null) {
-            
-        } else {
+        if(backend.listJobAds()){
+            System.out.println("Nincs hírdetés.");
             partnerCompanyMenu();
         }
+        else{
+            System.out.println("Kérem a törölni kívánt hírdetés sorszámait ( ','-vel elválasztva)");
+            String serialNumbers = scanner.next();
+            if (serialNumbers != null) {
+                String[] serialNumbersArr = serialNumbers.split(",");
+                backend.deleteJobAd(serialNumbersArr);
+                partnerCompanyMenu();
+            } else {
+                partnerCompanyMenu();
+            }
+        }
+
 
     }
 

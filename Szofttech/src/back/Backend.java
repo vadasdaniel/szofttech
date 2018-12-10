@@ -8,10 +8,9 @@ import storage.jobAd.JobAdManager;
 import storage.subscribe.SubscribeManager;
 import storage.user.UserManager;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static java.lang.Integer.parseInt;
 
 public class Backend {
 
@@ -34,7 +33,7 @@ public class Backend {
 
     public boolean loginUser(String username, String password) {
         User user = userManager.getByUsernameAndPassword(username, password);
-        if ( user != null ) {
+        if (user != null) {
             loginSession = new LoginSession(UUID.randomUUID().toString(), user);
         } else {
             loginSession = new LoginSession(null, user);
@@ -62,7 +61,7 @@ public class Backend {
         String userId = UUID.randomUUID().toString();
         User user = new User(userId, name, username, password, userType);
 
-        if ( userType == UserType.PARTNER_COMPANY ) {
+        if (userType == UserType.PARTNER_COMPANY) {
             Company company = new Company(UUID.randomUUID().toString(), name, userId);
             companyManager.add(company);
         }
@@ -76,11 +75,11 @@ public class Backend {
             return true;
         } else {
             System.out.println("Hirdetés neve | Cég neve | Munka leírás");
-            jobAdManager.list()
-                    .forEach(jobAd -> {
-                        Company adCreator = companyManager.get(jobAd.getCompanyId());
-                        System.out.println(jobAd.getName() + "|" + adCreator.getName() + "|" + jobAd.getJobDescription());
-                    });
+            List<JobAd> list = jobAdManager.list();
+            for (int i =0; i<list.size(); i++){
+                Company adCreator = companyManager.get(list.get(i).getCompanyId());
+                System.out.println("(" + i + ")" + list.get(i).getName() + "|" + adCreator.getName() + "|" + list.get(i).getJobDescription());
+            }
             return false;
         }
     }
@@ -114,5 +113,13 @@ public class Backend {
 
     public Company getCompany(String id) {
         return companyManager.get(id);
+    }
+
+    public void deleteJobAd(String[] serialNumbers) {
+        List<JobAd> jobsToRemove = new ArrayList<>();
+        for (int i = 0; i < serialNumbers.length; i++) {
+            jobsToRemove.add(jobAdManager.list().get(parseInt(serialNumbers[i])));
+        }
+        jobAdManager.delete(jobsToRemove);
     }
 }
