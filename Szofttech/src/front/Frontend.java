@@ -282,6 +282,7 @@ public class Frontend {
                     System.out.println("Felhasználónév: " + user.getUsername());
                     System.out.println("Név: " + user.getName());
                     System.out.println("Típus: " + user.getUserType().toString());
+                    adminMenu();
                 } else {
                     System.out.println("A keresett felhasználó nem található.");
                     adminMenu();
@@ -296,6 +297,7 @@ public class Frontend {
                 if ( company.getId() != null ) {
                     System.out.println("\n--- CÉG ---");
                     System.out.println("Név: " + company.getName());
+                    adminMenu();
                 } else {
                     System.out.println("A keresett cég nem található.");
                     adminMenu();
@@ -313,6 +315,7 @@ public class Frontend {
                     System.out.println("Név: " + jobAd.getName());
                     System.out.println("Leírás: " + jobAd.getJobDescription());
                     System.out.println("Feladó: " + creator.getName());
+                    adminMenu();
                 } else {
                     System.out.println("A keresett hírdetés nem található.");
                     adminMenu();
@@ -405,6 +408,7 @@ public class Frontend {
                     System.out.println("\n--- HÍRDETÉS ---");
                     System.out.println("Név: " + jobAd.getName());
                     System.out.println("Leírás: " + jobAd.getJobDescription());
+                    partnerCompanyMenu();
                 } else {
                     System.out.println("A keresett hírdetés nem található.");
                     partnerCompanyMenu();
@@ -419,6 +423,7 @@ public class Frontend {
                     System.out.println("\n--- FELHASZNÁLÓ ---");
                     System.out.println("Név: " + user.getName());
                     System.out.println("Felhasználónév: " + user.getUsername());
+                    partnerCompanyMenu();
                 } else {
                     System.out.println("A keresett jelentkező nem található");
                     partnerCompanyMenu();

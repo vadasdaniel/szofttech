@@ -84,8 +84,6 @@ public class CompanyManager implements Manager<Company> {
     }
 
     public Company getByUserId(String userId){
-        System.out.println(userId);
-        System.out.println(companies);
         return companies
                 .stream()
                 .filter(company -> company.getUserId().equals(userId))

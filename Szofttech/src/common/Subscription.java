@@ -34,6 +34,6 @@ public class Subscription {
 
     @Override
     public String toString() {
-        return id + ", " + jobAdId + ", " + userId + ", " + state.toString();
+        return id + ", " + jobAdId + ", " + userId + "," + state.toString();
     }
 }

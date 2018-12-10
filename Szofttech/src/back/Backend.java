@@ -209,7 +209,6 @@ public class Backend {
                 subscription.getUserId(),
                 state
         );
-
         handledSubscriptionsManager.add(newSubscription);
     }
 

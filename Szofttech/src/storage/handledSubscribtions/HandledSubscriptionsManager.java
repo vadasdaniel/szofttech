@@ -13,13 +13,14 @@ import java.util.stream.Collectors;
 
 public class HandledSubscriptionsManager implements Manager<Subscription> {
 
-    private static final String fileName = "subscriptions.dat";
+    private static final String fileName = "handledSubscription.dat";
     private FileManager fileManager;
     private List<Subscription> handledSubscriptions;
     Logger logger = new Logger(this.getClass().getName());
 
     public HandledSubscriptionsManager(FileManager fileManager) {
         this.fileManager = fileManager;
+        readData();
     }
 
     @Override
@@ -28,7 +29,7 @@ public class HandledSubscriptionsManager implements Manager<Subscription> {
             List<String> datas = fileManager.read(fileName);
             handledSubscriptions = new ArrayList<>();
             for (String data : datas) {
-                String[] dataColumns = data.split(", ");
+                String[] dataColumns = data.split(",");
                 SubscriptionStateType state = SubscriptionStateType.valueOf(dataColumns[3]);
 
                 if (state != SubscriptionStateType.ACTIVE) {
