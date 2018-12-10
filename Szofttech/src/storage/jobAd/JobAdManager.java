@@ -43,10 +43,16 @@ public class JobAdManager implements Manager<JobAd> {
     }
 
     @Override
-    public void delete(JobAd content) {
-        jobAds.removeIf(next -> next.getId().equals(content.getId()));
+    public void delete(List<JobAd> content) {
+        String[] deleteContent = new String[content.size()];
+        content.forEach(remove -> jobAds.removeIf(existing -> existing.getId().equals(remove.getId())));
+
+        for ( int i = 0; i < deleteContent.length; i++ ) {
+            deleteContent[i] = content.get(0).toString();
+        }
+
         try {
-            fileManager.remove(fileName, content.toString());
+            fileManager.remove(fileName, deleteContent);
             logger.info(logger.DELETED);
         } catch (IOException e) {
             logger.error(logger.FAILED_DELETE);

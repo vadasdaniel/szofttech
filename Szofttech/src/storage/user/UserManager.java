@@ -47,10 +47,16 @@ public class UserManager implements Manager<User> {
     }
 
     @Override
-    public void delete(User userToDelete) {
-        users.removeIf(user -> user.getId().equals(userToDelete.getId()));
+    public void delete(List<User> content) {
+        String[] deleteContent = new String[content.size()];
+        content.forEach(remove -> users.removeIf(existing -> existing.getId().equals(remove.getId())));
+
+        for ( int i = 0; i < deleteContent.length; i++ ) {
+            deleteContent[i] = content.get(0).toString();
+        }
+
         try {
-            fileManager.remove(fileName, userToDelete.toString());
+            fileManager.remove(fileName, deleteContent);
             logger.info(logger.DELETED);
         } catch (IOException e) {
             logger.error(logger.FAILED_DELETE);

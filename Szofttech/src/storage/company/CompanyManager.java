@@ -44,10 +44,16 @@ public class CompanyManager implements Manager<Company> {
     }
 
     @Override
-    public void delete(Company content) {
-        companies.removeIf(company -> company.getId().equals(content.getId()));
+    public void delete(List<Company> content) {
+        String[] deleteContent = new String[content.size()];
+        content.forEach(remove -> companies.removeIf(existing -> existing.getId().equals(remove.getId())));
+
+        for ( int i = 0; i < deleteContent.length; i++ ) {
+            deleteContent[i] = content.get(0).toString();
+        }
+
         try {
-            fileManager.remove(fileName, content.toString());
+            fileManager.remove(fileName, deleteContent);
         } catch (IOException e) {
             // TODO Logging
         }
