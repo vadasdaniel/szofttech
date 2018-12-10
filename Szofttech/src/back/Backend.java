@@ -100,6 +100,14 @@ public class Backend {
         subscribeManager.delete(subscription);
     }
 
+    public String getCompanyIdByUserId(String userId) {
+        return companyManager.getByUserId(userId).getId();
+    }
+
+    public void saveJobAd(JobAd jobAd) {
+        jobAdManager.add(jobAd);
+    }
+
     public JobAd getJobAd(String id) {
         return jobAdManager.get(id);
     }

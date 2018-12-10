@@ -33,10 +33,10 @@ public class UserManager implements Manager<User> {
                 String[] dataColumn = data.split(", ");
 
                 User user = new User(
-                        dataColumn[0],
-                        dataColumn[1],
-                        dataColumn[2],
-                        dataColumn[3],
+                        dataColumn[0].trim(),
+                        dataColumn[1].trim(),
+                        dataColumn[2].trim(),
+                        dataColumn[3].trim(),
                         UserType.valueOf(dataColumn[4])
                 );
                 users.add(user);

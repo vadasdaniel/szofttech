@@ -33,9 +33,9 @@ public class HandledSubscriptionsManager implements Manager<Subscription> {
 
                 if (state != SubscriptionStateType.ACTIVE) {
                     Subscription handledSubscription = new Subscription(
-                            dataColumns[0],
-                            dataColumns[1],
-                            dataColumns[2],
+                            dataColumns[0].trim(),
+                            dataColumns[1].trim(),
+                            dataColumns[2].trim(),
                             state
                     );
                     handledSubscriptions.add(handledSubscription);

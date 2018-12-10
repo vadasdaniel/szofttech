@@ -35,9 +35,9 @@ public class SubscribeManager implements Manager<Subscription> {
 
                 if (state == SubscriptionStateType.ACTIVE) {
                     Subscription subscription = new Subscription(
-                            dataColumn[0],
-                            dataColumn[1],
-                            dataColumn[2],
+                            dataColumn[0].trim(),
+                            dataColumn[1].trim(),
+                            dataColumn[2].trim(),
                             state
                     );
                     subscriptions.add(subscription);
