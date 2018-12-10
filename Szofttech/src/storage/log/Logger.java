@@ -3,7 +3,6 @@ package storage.log;
 import back.FileManager;
 import common.Log;
 import storage.ExceptionManager;
-import storage.Manager;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -12,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class Logger implements Manager<Log> {
+public class Logger {
 
     public final String NOT_FOUND = "Nem található!";
     public final String DATABASE_NOT_FOUND = "Az adatbázis nem található!";
@@ -36,7 +35,6 @@ public class Logger implements Manager<Log> {
         readData();
     }
 
-    @Override
     public void readData() {
         try {
             List<String> datas = fileManager.read(fileName);
@@ -57,17 +55,15 @@ public class Logger implements Manager<Log> {
         }
     }
 
-    @Override
     public void delete(Log content) {
         logs.removeIf(next -> next.getId().equals(content.getId()));
         try {
-            fileManager.remove(fileName, content.toString());
+            fileManager.remove(fileName, new String[]{content.toString()});
         } catch (IOException e) {
             exceptionManager.error("Hiba a log törlése közben.");
         }
     }
 
-    @Override
     public void add(Log content) {
         try {
             fileManager.add(fileName, content.toLogSave());
@@ -76,7 +72,6 @@ public class Logger implements Manager<Log> {
         }
     }
 
-    @Override
     public Log get(String id) {
         try {
             return logs
@@ -91,7 +86,6 @@ public class Logger implements Manager<Log> {
 
     }
 
-    @Override
     public List<Log> list() {
         return logs;
     }
