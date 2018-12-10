@@ -4,6 +4,7 @@ import back.Backend;
 import common.Company;
 import common.JobAd;
 import common.Subscription;
+import common.enums.UserType;
 
 import java.util.*;
 
@@ -65,6 +66,7 @@ public class Frontend {
         if (backend.loginUser(username, password)) {
             switch (backend.getLoggedInUser().getUserType()) {
                 case USER:
+
                     userMenu();
                     break;
                 case PARTNER_COMPANY:
@@ -238,8 +240,8 @@ public class Frontend {
         }
     }
 
-    private void deleteUser() {
-
+    private void deleteUser(){
+        
     }
 
     private void statistics() {
@@ -276,7 +278,11 @@ public class Frontend {
     private void deleteJobAd() {
         if(backend.listJobAds()){
             System.out.println("Nincs hírdetés.");
-            partnerCompanyMenu();
+            if (backend.getLoggedInUser().getUserType() == UserType.PARTNER_COMPANY){
+                partnerCompanyMenu();
+            } else {
+                adminMenu();
+            }
         }
         else{
             System.out.println("Kérem a törölni kívánt hírdetés sorszámait ( ','-vel elválasztva)");
@@ -284,13 +290,19 @@ public class Frontend {
             if (serialNumbers != null) {
                 String[] serialNumbersArr = serialNumbers.split(",");
                 backend.deleteJobAd(serialNumbersArr);
-                partnerCompanyMenu();
+                if (backend.getLoggedInUser().getUserType() == UserType.PARTNER_COMPANY){
+                    partnerCompanyMenu();
+                } else {
+                    adminMenu();
+                }
             } else {
-                partnerCompanyMenu();
+                if (backend.getLoggedInUser().getUserType() == UserType.PARTNER_COMPANY){
+                    partnerCompanyMenu();
+                } else {
+                    adminMenu();
+                }
             }
         }
-
-
     }
 
     private void logout(){
