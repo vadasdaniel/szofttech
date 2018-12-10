@@ -1,6 +1,7 @@
 package front;
 
 import back.Backend;
+import common.Company;
 import common.JobAd;
 import common.Subscription;
 
@@ -120,8 +121,16 @@ public class Frontend {
     private void unsubscribeWindow() {
         FrontendUtil.writeWindowHeader("Lejelentkezés hirdetésről");
         Map<JobAd, Subscription> subscriptions = backend.getUserSubscriptions();
-        System.out.println("Munka neve | Leírás");
-        subscriptions.forEach((job, subscriptionId) -> System.out.println(job.getName() + job.getJobDescription()));
+        System.out.println("Index | Cég neve | Munka neve | Leírás");
+        Integer itemIndex = 0;
+
+        for ( Map.Entry<JobAd, Subscription> entry: subscriptions.entrySet() ) {
+            JobAd jobAd = entry.getKey();
+            Company company = backend.getCompany(jobAd.getCompanyId());
+            System.out.println(itemIndex + company.getName() + jobAd.getName() + jobAd.getJobDescription());
+            itemIndex++;
+        }
+
         System.out.print("Írja be a megfelelő sorszámot(kat), hogy lejelentkezzen(vesszővel elválasztva):");
         String[] indexes = scanner.next().split(",");
         List<Subscription> subscriptionList = new ArrayList<>();
@@ -153,8 +162,9 @@ public class Frontend {
 
     private void userMenu() {
         FrontendUtil.writeWindowHeader("Ügyfél menü");
-        System.out.println("(1) Keresés\n" +
-                "(2) Lejelentkezés hírdetéstről");
+        System.out.println("(1) Keresés");
+        System.out.println("(2) Lejelentkezés hírdetéstről");
+        System.out.println("(9) Kijelentkezés");
         int choose = scanner.nextInt();
         switch (choose) {
             case 1:
@@ -162,6 +172,9 @@ public class Frontend {
                 break;
             case 2:
                 unsubscribeWindow();
+                userMenu();
+                break;
+            case 9:
                 break;
         }
     }
@@ -214,7 +227,7 @@ public class Frontend {
     }
 
     private void listJobAds() {
-        System.out.println("\n Hírdetések listázása!\n");
+        FrontendUtil.writeWindowHeader("Hirdetések listázása");
         Boolean isEmpty = backend.listJobAds();
 
         if ( isEmpty ) {
