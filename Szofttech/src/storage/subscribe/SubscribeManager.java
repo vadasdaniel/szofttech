@@ -4,6 +4,7 @@ import back.FileManager;
 import common.Subscription;
 import common.enums.SubscriptionStateType;
 import storage.Manager;
+import storage.log.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class SubscribeManager implements Manager<Subscription> {
     private static final String fileName = "subscriptions.dat";
     private FileManager fileManager;
     private List<Subscription> subscriptions;
+    Logger logger = new Logger(fileManager, this.getClass().getName());
 
     public SubscribeManager(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -26,12 +28,12 @@ public class SubscribeManager implements Manager<Subscription> {
         try {
             List<String> datas = fileManager.read(fileName);
             subscriptions = new ArrayList<>();
-            for ( String data: datas ) {
+            for (String data : datas) {
                 String[] dataColumn = data.split(",");
 
                 SubscriptionStateType state = SubscriptionStateType.valueOf(dataColumn[3]);
 
-                if ( state == SubscriptionStateType.ACTIVE ) {
+                if (state == SubscriptionStateType.ACTIVE) {
                     Subscription subscription = new Subscription(
                             dataColumn[0],
                             dataColumn[1],
@@ -42,7 +44,7 @@ public class SubscribeManager implements Manager<Subscription> {
                 }
             }
         } catch (IOException e) {
-            // TODO Logging
+            logger.error(logger.DATABASE_NOT_FOUND);
         }
     }
 
@@ -51,18 +53,25 @@ public class SubscribeManager implements Manager<Subscription> {
         subscriptions.removeIf(subscription -> subscription.getId().equals(content.getId()));
         try {
             fileManager.remove(fileName, content.toString());
-        } catch ( IOException e ) {
-            // TODO Logging
+            logger.info(logger.DELETED);
+        } catch (IOException e) {
+            logger.error(logger.FAILED_DELETE);
         }
     }
 
     @Override
     public Subscription get(String id) {
-        return subscriptions
-                .stream()
-                .filter(subscription -> subscription.getId().equals(id))
-                .collect(Collectors.toList())
-                .get(0);
+        try {
+            return subscriptions
+                    .stream()
+                    .filter(subscription -> subscription.getId().equals(id))
+                    .collect(Collectors.toList())
+                    .get(0);
+        } catch (Exception e) {
+            logger.error(logger.NOT_FOUND);
+            return null;
+        }
+
     }
 
     @Override
@@ -70,8 +79,9 @@ public class SubscribeManager implements Manager<Subscription> {
         subscriptions.add(content);
         try {
             fileManager.add(fileName, content.toString());
+            logger.info(logger.ADDED);
         } catch (IOException e) {
-
+            logger.error(logger.FAILED_ADD);
         }
     }
 

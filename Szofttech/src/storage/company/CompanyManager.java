@@ -3,6 +3,7 @@ package storage.company;
 import back.FileManager;
 import common.Company;
 import storage.Manager;
+import storage.log.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class CompanyManager implements Manager<Company> {
     private static final String fileName = "companies.dat";
     private List<Company> companies;
     private FileManager fileManager;
+    Logger logger = new Logger(fileManager, this.getClass().getName());
 
     public CompanyManager(FileManager fileManager) {
         this.fileManager = fileManager;
